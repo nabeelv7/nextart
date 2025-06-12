@@ -1,9 +1,10 @@
 import { auth } from "@/auth";
 import ButtonSignIn from "@/components/ButtonSignIn";
+import { redirect } from "next/navigation";
 
 export default async function Home() {
   const session = await auth();
-  console.log(session);
+  if (session?.user) redirect("/dashboard")
 
   return (
     <>
