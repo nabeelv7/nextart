@@ -14,7 +14,11 @@ export default function ButtonCreateMatch() {
     if (isLoading) return;
     setIsLoading(true);
     try {
-      const { data } = await axios.post("/api/create", { name, date, time });
+      const { data } = await axios.post("/api/create", {
+        match_name: name,
+        match_date: date,
+        match_time: time,
+      });
       console.log(data);
     } catch (err) {
       setError(err.message);
