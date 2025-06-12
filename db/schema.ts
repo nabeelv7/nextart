@@ -103,6 +103,7 @@ export const matches = sqliteTable("matches", {
 // this is a table for match participants, each participant is a row, and has its own matchId, its userId, and whether it's the host or not, and he also has a role, he could be defender, attacker, midfielder, or goalkeeper.
 export const match_participants = sqliteTable("match_participants", {
   id: integer("id").primaryKey({ autoIncrement: true }),
+  participant_name: text("participant_name").notNull(),
   matchId: integer("matchId")
     .notNull()
     .references(() => matches.id, { onDelete: "cascade" }),

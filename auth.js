@@ -1,10 +1,11 @@
 import NextAuth from "next-auth";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
+import Google from "next-auth/providers/google";
 import { db } from "./db";
 
 const config = {
   // register your providers here
-  providers: [],
+  providers: [Google],
   // connection to the drizzle database
   adapter: DrizzleAdapter(db),
 };
