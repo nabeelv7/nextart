@@ -1,4 +1,5 @@
 "use client";
+import axios from "axios";
 import { useState } from "react";
 
 export default function ButtonCreateMatch() {
@@ -6,32 +7,24 @@ export default function ButtonCreateMatch() {
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  async function createMatch() {
+  async function createMatch(event) {
+    event.preventDefault();
+    if (isLoading) return;
     setIsLoading(true);
     try {
-      const res = await fetch("/api/create", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name,
-          date,
-          time,
-        }),
-      });
-      const data = await res.json();
+      const { data } = await axios.post("/api/create", { name, date, time });
       console.log(data);
     } catch (err) {
-      console.log(err);
+      setError(err.message);
     } finally {
       setIsLoading(false);
     }
   }
 
   return (
-    <>
+    <form onSubmit={createMatch}>
       <input
         onChange={(e) => setName(e.target.value)}
         className="input"
@@ -50,11 +43,11 @@ export default function ButtonCreateMatch() {
         type="time"
         required
       />
-
-      <button onClick={createMatch} className="btn btn-primary">
+      {error && <p className="error">{error}</p>}
+      <button type="submit" className="btn btn-primary">
         {isLoading && <span className="loading loading-spinner"></span>}
         Create Match
       </button>
-    </>
+    </form>
   );
 }
