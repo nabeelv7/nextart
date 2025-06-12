@@ -87,3 +87,28 @@ export const authenticators = sqliteTable(
 );
 
 // your schema here
+
+// this is a match, that can be created by a user.
+// the match references the userId and has its own name, date, & time.
+export const matches = sqliteTable("matches", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  match_name: text("match_name").notNull(),
+  match_date: text("match_date").notNull(),
+  match_time: text("match_time").notNull(),
+  creatorId: text("creatorId")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+});
+
+// this is a table for match participants, each participant is a row, and has its own matchId, its userId, and whether it's the host or not, and he also has a role, he could be defender, attacker, midfielder, or goalkeeper.
+export const match_participants = sqliteTable("match_participants", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  matchId: integer("matchId")
+    .notNull()
+    .references(() => matches.id, { onDelete: "cascade" }),
+  participantId: text("participantId")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  is_host: integer("is_host", { mode: "boolean" }).notNull(),
+  role: text("role").notNull(),
+});
